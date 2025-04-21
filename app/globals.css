@@ -1,26 +1,87 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-primary: #fcf5e8;
+  --color-secondary: #4d4637;
+  --color-accent: #ffd32c;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  * {
+    @apply m-0 p-0 box-border;
+  }
+  body {
+    @apply bg-primary flex flex-col font-[family-name:var(--font-roboto)];
+  }
+  h1 {
+    @apply text-2xl md:text-3xl lg:text-4xl text-secondary;
+  }
+  h2 {
+    @apply text-lg md:text-xl lg:text-2xl text-secondary;
+  }
+  h3 {
+    @apply text-lg md:text-lg lg:text-xl text-secondary;
+  }
+  p {
+    @apply text-sm md:text-base text-secondary;
+  }
+  small {
+    @apply text-xs md:text-sm font-semibold text-secondary;
+  }
+  input {
+    @apply w-fit outline-none rounded-md p-4 text-secondary placeholder:text-secondary/50 bg-accent/25 shadow-sm border-2 border-accent/25 hover:shadow-md active:shadow-md focus:shadow-md hover:bg-accent/50 active:bg-accent/50 focus:bg-accent/50 hover:border-secondary active:border-secondary focus:border-secondary transition-all duration-300 ease-in-out;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  ::-webkit-scrollbar-track {
+    @apply bg-accent/50;
+  }
+  ::-webkit-scrollbar {
+    @apply w-[.5rem];
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-secondary;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .icon {
+    @apply text-sm md:text-xl text-secondary;
+  }
+  .button,
+  .link {
+    @apply w-fit flex items-center justify-center gap-2 cursor-pointer;
+  }
+  .button {
+    @apply rounded-md p-2 bg-accent shadow-sm border-2 border-accent hover:shadow-md hover:bg-accent/50 hover:border-secondary transition-all duration-300 ease-in-out;
+  }
+  .link-child {
+    @apply group-hover:text-secondary/75 transition-all duration-300 ease-in-out;
+  }
+  .react-datepicker {
+    @apply shadow-md left-10 border-none;
+  }
+  .react-datepicker__month-container {
+    @apply rounded-t-md;
+  }
+  .react-datepicker
+    .react-datepicker__month-container
+    .react-datepicker__header {
+    @apply font-[family-name:var(--font-roboto)] text-secondary;
+  }
+  .react-datepicker__day,
+  .react-datepicker__month-text {
+    @apply font-[family-name:var(--font-roboto)] text-secondary font-semibold;
+  }
+  .react-datepicker__day--keyboard-selected,
+  .react-datepicker__month-text--keyboard-selected,
+  .react-datepicker__quarter-text--keyboard-selected,
+  .react-datepicker__year-text--keyboard-selected {
+    @apply bg-accent!;
+  }
+}
+
+@layer utilities {
+  .anim-transition {
+    @apply transition-all duration-300 ease-in-out;
+  }
 }
