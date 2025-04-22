@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <StaggerAnimWrapper
       tag="main"
-      style="w-full max-w-7xl mx-auto flex flex-col gap-5 p-5"
+      style="w-full max-w-7xl mx-auto flex flex-col  gap-5 p-5"
     >
       <h1>Dashoboard</h1>
 

@@ -26,7 +26,7 @@ const Sidebar = ({ setOpen }: Props) => {
             aria-label={`${navLink.text}-link`}
             key={index}
             href={navLink.href}
-            className="group link justify-start w-[89px]"
+            className="group link justify-start w-[125px]"
           >
             <navLink.icon className="icon link-child" />
             <small className="link-child group-hover:translate-x-1 anim-transition">

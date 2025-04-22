@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 import { FaGear } from "react-icons/fa6";
 import { RiMenu3Fill } from "react-icons/ri";
@@ -12,13 +14,19 @@ import useIsScrolling from "@/hooks/useIsScrolling";
 import useScreenWidth from "@/hooks/useScreenWidth";
 
 import Sidebar from "./Sidebar";
-import { useSession } from "next-auth/react";
 
 const Navbar = () => {
   const isScrolling = useIsScrolling();
   const width = useScreenWidth();
   const { data: session } = useSession();
+  const pathname = usePathname();
   const [openSB, setOpenSB] = useState(false);
+
+  useEffect(() => {
+    if (openSB) setOpenSB(false);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   return (
     <>
