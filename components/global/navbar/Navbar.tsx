@@ -12,11 +12,12 @@ import useIsScrolling from "@/hooks/useIsScrolling";
 import useScreenWidth from "@/hooks/useScreenWidth";
 
 import Sidebar from "./Sidebar";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
   const isScrolling = useIsScrolling();
   const width = useScreenWidth();
-
+  const { data: session } = useSession();
   const [openSB, setOpenSB] = useState(false);
 
   return (
@@ -53,7 +54,7 @@ const Navbar = () => {
             </nav>
 
             <div className="flex items-center gap-5">
-              <p className="font-semibold">Hello, User</p>
+              <p className="font-semibold">Hello, {session?.user?.name}</p>
               <Link
                 href={"#"}
                 aria-label="account-settings-link"

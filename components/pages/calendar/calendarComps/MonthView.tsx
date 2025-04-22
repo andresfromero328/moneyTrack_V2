@@ -15,7 +15,6 @@ const MonthView = ({
   setSelectedDate,
 }: // setShowModal
 Props) => {
-  const todayDate = new Date(new Date().toLocaleDateString());
   const daysInMonthView = handleMonthView(selectedDate);
 
   const handleShowBills = (date: Date) => {
@@ -36,7 +35,7 @@ Props) => {
             onClick={() => handleShowBills(date)}
             className={`relative cursor-pointer ${
               date.toLocaleDateString("en-CA") ===
-              todayDate.toLocaleDateString("en-CA")
+              selectedDate.toLocaleDateString("en-CA")
                 ? "bg-accent/80 [&>*:nth-child(1)]:text-secondary"
                 : "bg-light"
             } border-2 border-extra hover:bg-accent/80 anim-transition`}
