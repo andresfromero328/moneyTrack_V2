@@ -93,7 +93,7 @@ const SpendingAreaChart = () => {
         Monthly Spending
       </h2>
 
-      <div className="w-full h-60 p-2">
+      <div className="flex-1 w-full h-60 p-5">
         <Line
           id="-dashboard-spending-line-chart"
           data={data}

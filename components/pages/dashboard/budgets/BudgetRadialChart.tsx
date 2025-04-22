@@ -58,7 +58,6 @@ const BudgetRadialChart = () => {
         className="z-10"
       />
       <div
-        id="budget-info-summary"
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-xl font-bold"
       >
         <div className="flex flex-col items-center">
