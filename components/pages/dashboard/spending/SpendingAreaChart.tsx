@@ -33,7 +33,7 @@ const SpendingAreaChart = () => {
     datasets: [
       {
         data: [300, 400, 500, 700, 600, 800],
-        backgroundColor: "rgba(255, 211, 44, .25)",
+        backgroundColor: "rgba(255, 211, 44, .45)",
         borderColor: "rgba(77, 70, 55, 1)",
         pointRadius: 5,
         tension: 0.4,
@@ -92,9 +92,13 @@ const SpendingAreaChart = () => {
       <h2 className="bg-accent/30 p-2 rounded-tl-md shadow-sm">
         Monthly Spending
       </h2>
-      {/* <small className="flex-1 grid place-items-center">[area chart]</small> */}
+
       <div className="w-full h-60 p-2">
-        <Line id="speding-line-chart" data={data} options={options} />
+        <Line
+          id="-dashboard-spending-line-chart"
+          data={data}
+          options={options}
+        />
       </div>
     </div>
   );
