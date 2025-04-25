@@ -14,7 +14,9 @@ import {
   Filler,
   ChartOptions,
   ChartData,
+  TooltipItem,
 } from "chart.js";
+import { OverviewTransaction } from "@/lib/types";
 
 ChartJS.register(
   CategoryScale,
@@ -27,12 +29,34 @@ ChartJS.register(
   Filler
 );
 
-const SpendingAreaChart = () => {
+interface Props {
+  spending: OverviewTransaction[] | null;
+}
+
+const SpendingAreaChart = ({ spending }: Props) => {
+  // Creates labels for the area chart
+  const labels = (spending: OverviewTransaction[]) => {
+    const setLabels: string[] = [];
+    spending.forEach((item) => {
+      setLabels.push(item.date);
+    });
+    return setLabels;
+  };
+
+  // Creates data points for the area chart
+  const dataPoints = (spending: OverviewTransaction[]) => {
+    const setDataPoints: number[] = [];
+    spending.forEach((item) => {
+      setDataPoints.push(item.amount);
+    });
+    return setDataPoints;
+  };
+
   const data: ChartData<"line"> = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    labels: labels(spending!),
     datasets: [
       {
-        data: [300, 400, 500, 700, 600, 800],
+        data: dataPoints(spending!),
         backgroundColor: "rgba(255, 211, 44, .45)",
         borderColor: "rgba(77, 70, 55, 1)",
         pointRadius: 5,
@@ -58,6 +82,12 @@ const SpendingAreaChart = () => {
           size: 14,
           family: "Lexend, sans-serif",
         },
+        callbacks: {
+          label: (ctx: TooltipItem<"line">) => {
+            const label = ctx.raw;
+            return [`${spending![ctx.dataIndex].name}: `, `$${label}`];
+          },
+        },
       },
     },
     scales: {
@@ -79,6 +109,7 @@ const SpendingAreaChart = () => {
         },
         ticks: {
           color: "#272727",
+          callback: (value: number | string) => "$" + value,
           font: {
             size: 14,
             family: "Lexend, sans-serif",

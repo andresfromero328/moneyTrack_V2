@@ -7,6 +7,7 @@ import PendBillsRadialChart from "@/components/pages/calendar/PendBillsRadialCha
 import BillsBrkdDonutChart from "@/components/pages/calendar/BillsBrkdDonutChart";
 
 const CalendarPage = () => {
+
   return (
     <StaggerAnimWrapper
       tag="main"

@@ -11,7 +11,7 @@
     @apply m-0 p-0 box-border;
   }
   body {
-    @apply bg-primary flex flex-col font-[family-name:var(--font-lexend)];
+    @apply bg-primary flex flex-col min-h-screen font-[family-name:var(--font-lexend)];
   }
   h1 {
     @apply text-2xl md:text-3xl lg:text-4xl font-bold text-secondary;

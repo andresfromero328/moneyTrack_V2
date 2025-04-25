@@ -9,3 +9,16 @@ export interface CustomSession extends Session {
   plaidLinked: boolean;
   userID: string;
 }
+
+export interface Subscription {
+  name: string;
+  firstDate: string;
+  amount: number;
+  id: string;
+}
+
+export interface OverviewTransaction {
+  name: string;
+  amount: number;
+  date: string;
+}
