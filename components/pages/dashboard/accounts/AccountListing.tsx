@@ -9,7 +9,7 @@ const AccountListing = ({ accounts }: Props) => {
   return (
     <div className="flex flex-col gap-2 p-2">
       {accounts &&
-        accounts.map((account) => (
+        accounts.slice(0, 5).map((account) => (
           <div
             key={account.account_id}
             className="flex flex-col gap-1 p-2 rounded-md bg-secondary/5 hover:bg-secondary/10 transition-all duration-300 ease-in-out"

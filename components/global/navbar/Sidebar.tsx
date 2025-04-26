@@ -38,7 +38,11 @@ const Sidebar = ({ setOpen }: Props) => {
 
       <div className="flex items-center gap-5 ml-auto">
         <p className="font-semibold">Hello, User</p>
-        <Link href={"#"} aria-label="account-settings-link" className="button">
+        <Link
+          href={"/user-account/settings"}
+          aria-label="user-account-settings-link"
+          className="button"
+        >
           <FaGear className="icon" />
         </Link>
       </div>

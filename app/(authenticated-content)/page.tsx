@@ -1,8 +1,13 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
+import { authOptions } from "@/lib/auth";
 import { CustomSession, OverviewTransaction } from "@/lib/types";
 import { getPlaidAccessToken } from "@/lib/dataFetching/global/getPlaidAccessToken";
+
+import { getUserAccounts } from "@/lib/dataFetching/homePage/getUserAccounts";
+import { getUserSpending } from "@/lib/dataFetching/homePage/getUserSpending";
+import { getUserSubscriptions } from "@/lib/dataFetching/homePage/getUserSubscriptions";
 
 import StaggerAnimWrapper from "@/components/animations/StaggerAnimWrapper";
 import Accounts from "@/components/pages/dashboard/accounts/Accounts";
@@ -10,10 +15,7 @@ import Budgets from "@/components/pages/dashboard/budgets/Budgets";
 import SpendingAreaChart from "@/components/pages/dashboard/spending/SpendingAreaChart";
 import Subscriptions from "@/components/pages/dashboard/subscriptions/Subscriptions";
 import UpcomingBill from "@/components/pages/dashboard/upcomingBill/UpcomingBill";
-import { redirect } from "next/navigation";
-import { getUserAccounts } from "@/lib/dataFetching/homePage/getUserAccounts";
-import { getUserSubscriptions } from "@/lib/dataFetching/homePage/getUserSubscriptions";
-import { getUserSpending } from "@/lib/dataFetching/homePage/getUserSpending";
+import { getUserNxtBill } from "@/lib/dataFetching/homePage/getUserNxtBill";
 
 export default async function Home() {
   const session: CustomSession | null = await getServerSession(authOptions);
@@ -40,6 +42,7 @@ export default async function Home() {
       firstMonthDate.toISOString().slice(0, 10),
       todayDate.toISOString().slice(0, 10)
     );
+  const nxtBills = await getUserNxtBill(accounts, token);
 
   return (
     <StaggerAnimWrapper
@@ -51,7 +54,7 @@ export default async function Home() {
       <div className="flex flex-col md:grid md:grid-cols-2 md:grid-rows-3 gap-5">
         <SpendingAreaChart spending={spending} />
         <Accounts accounts={accounts} />
-        <UpcomingBill />
+        <UpcomingBill nxtBills={nxtBills} />
         <Budgets />
         <Subscriptions subscriptions={subscriptions} />
       </div>

@@ -2,6 +2,10 @@ import { AccountBase } from "plaid";
 import { client } from "@/lib/plaid";
 import { unstable_cache } from "next/cache";
 import { OverviewTransaction } from "@/lib/types";
+import {
+  OMIT_DTLD_CATS_SPENDING,
+  OMIT_PRIM_CATS_SPENDING,
+} from "@/utils/categories";
 
 const fetchSpending = async (
   accounts: AccountBase[],
@@ -10,16 +14,6 @@ const fetchSpending = async (
   lastDay: string
 ) => {
   try {
-    // Variables
-    const omitCategories = [
-      "Transfer",
-      "Credit Card",
-      "Deposit",
-      "Payment",
-      "Service",
-      "Bank Fees",
-    ];
-
     // function call to request monthly transactions
     const monthlyTranscations = await client.transactionsGet({
       access_token: accessToken,
@@ -54,22 +48,24 @@ const fetchSpending = async (
     const spending: OverviewTransaction[] = transactions
       .filter((transaction) => {
         const validCategory =
-          transaction.category?.some((categ) =>
-            omitCategories.includes(categ)
-          ) === false && !transaction.name.includes("RECURRING");
+          !OMIT_PRIM_CATS_SPENDING.includes(
+            transaction.personal_finance_category!.primary
+          ) ||
+          !OMIT_DTLD_CATS_SPENDING.includes(
+            transaction.personal_finance_category!.detailed
+          );
 
-        const isOutflow = transaction.amount > 0;
+        // const isOutflow = transaction.amount > 0;
 
-        // Ensure merchant_name exists and all other checks pass
         return (
           validCategory &&
-          isOutflow &&
+          // isOutflow &&
           typeof transaction.merchant_name === "string"
         );
       })
       .map((transaction) => ({
-        name: transaction.merchant_name as string, // TypeScript safe now
-        amount: transaction.amount,
+        name: transaction.merchant_name || transaction.name,
+        amount: Math.abs(transaction.amount),
         date: transaction.date,
       }))
       .reverse();
@@ -88,6 +84,6 @@ export const getUserSpending = unstable_cache(
     firstDay: string,
     lastDay: string
   ) => fetchSpending(accounts, accessToken, firstDay, lastDay),
-  ["get-user-plaid-access-token"],
+  ["get-user-spending"],
   { revalidate: 1800 }
 );

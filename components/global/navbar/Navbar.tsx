@@ -64,8 +64,8 @@ const Navbar = () => {
             <div className="flex items-center gap-5">
               <p className="font-semibold">Hello, {session?.user?.name}</p>
               <Link
-                href={"#"}
-                aria-label="account-settings-link"
+                href={"/user-account/settings"}
+                aria-label="user-account-settings-link"
                 className="button"
               >
                 <FaGear className="icon" />
