@@ -38,7 +38,7 @@ const SpendingAreaChart = ({ spending }: Props) => {
   const labels = (spending: OverviewTransaction[]) => {
     const setLabels: string[] = [];
     spending.forEach((item) => {
-      setLabels.push(item.date);
+      setLabels.push(item.date.slice(5));
     });
     return setLabels;
   };

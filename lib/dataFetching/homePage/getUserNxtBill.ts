@@ -5,7 +5,8 @@ import { BILLS_DTLD_CATS, BILLS_PRIM_CATS } from "@/utils/categories";
 
 const fetchUserNxtBill = async (
   accounts: AccountBase[] | null,
-  plaidAccToken: string
+  plaidAccToken: string,
+  todayDate: Date
 ) => {
   try {
     if (!accounts) throw new Error("there are no accounts");
@@ -17,17 +18,18 @@ const fetchUserNxtBill = async (
 
     const billsRecurrTransactions = recurrTransactions.filter((transaction) => {
       if (
-        BILLS_PRIM_CATS.includes(
+        (BILLS_PRIM_CATS.includes(
           transaction.personal_finance_category!.primary
         ) ||
-        BILLS_DTLD_CATS.includes(
-          transaction.personal_finance_category!.detailed
-        )
+          BILLS_DTLD_CATS.includes(
+            transaction.personal_finance_category!.detailed
+          )) &&
+        new Date(transaction.predicted_next_date!).getMonth() === todayDate.getMonth()
       )
         return transaction;
       return null;
     });
-    
+
     return billsRecurrTransactions;
   } catch (e) {
     console.log(e);
@@ -36,8 +38,11 @@ const fetchUserNxtBill = async (
 };
 
 export const getUserNxtBill = unstable_cache(
-  async (accounts: AccountBase[] | null, plaidAccToken: string) =>
-    fetchUserNxtBill(accounts, plaidAccToken),
+  async (
+    accounts: AccountBase[] | null,
+    plaidAccToken: string,
+    todayDate: Date
+  ) => fetchUserNxtBill(accounts, plaidAccToken, todayDate),
   ["get-user-next-bill"],
   { revalidate: 900 }
 );

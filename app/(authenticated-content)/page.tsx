@@ -42,14 +42,20 @@ export default async function Home() {
       firstMonthDate.toISOString().slice(0, 10),
       todayDate.toISOString().slice(0, 10)
     );
-  const nxtBills = await getUserNxtBill(accounts, token);
+  const nxtBills = await getUserNxtBill(accounts, token, todayDate);
 
   return (
     <StaggerAnimWrapper
       tag="main"
       style="w-full max-w-7xl mx-auto flex flex-col  gap-5 p-5"
     >
-      <h1>Dashoboard</h1>
+      <h1>
+        Dashoboard -{" "}
+        {todayDate.toLocaleDateString("en-US", {
+          month: "long",
+          year: "numeric",
+        })}
+      </h1>
 
       <div className="flex flex-col md:grid md:grid-cols-2 md:grid-rows-3 gap-5">
         <SpendingAreaChart spending={spending} />
