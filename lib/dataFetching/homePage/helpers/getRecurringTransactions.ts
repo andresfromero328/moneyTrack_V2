@@ -25,5 +25,5 @@ export const getRecurrTransactions = unstable_cache(
   async (accounts: AccountBase[] | null, plaidAccToken: string) =>
     fetchRecurrTransactions(accounts, plaidAccToken),
   ["get-user-recurr-transactions"],
-  { revalidate: 900 }
+  { revalidate: 900, tags: ["get-user-recurr-transactions"] }
 );

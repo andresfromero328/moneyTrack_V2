@@ -1,16 +1,5 @@
-import mongoose, { Schema, model } from "mongoose";
-
-export interface UserDocument {
-  _id: string;
-  email: string;
-  password: string;
-  name: string;
-  image: string;
-  isOAuth: boolean;
-  plaidLinked: boolean;
-  plaidAccessToken: string;
-  plaidItemID: string;
-}
+import { BudgetDocument, UserDocument } from "@/lib/types";
+import mongoose, { model, Schema } from "mongoose";
 
 const UserSchema = new Schema<UserDocument>(
   {
@@ -57,6 +46,34 @@ const UserSchema = new Schema<UserDocument>(
   }
 );
 
-const User = mongoose.models?.User || model<UserDocument>("User", UserSchema);
+const BudgetSchema = new Schema<BudgetDocument>({
+  userID: {
+    type: String,
+    unique: false,
+    required: true,
+  },
+  budgetName: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  budgetAmount: {
+    type: Number,
+    required: true,
+  },
+  mCategory: {
+    type: String,
+    required: true,
+  },
+  sCategory: {
+    type: String,
+  },
+  cCategory: {
+    type: String,
+  },
+});
 
-export { User };
+const User = mongoose.models?.User || model<UserDocument>("User", UserSchema);
+const Budget =
+  mongoose.models?.Budget || model<BudgetDocument>("Budget", BudgetSchema);
+export { User, Budget };

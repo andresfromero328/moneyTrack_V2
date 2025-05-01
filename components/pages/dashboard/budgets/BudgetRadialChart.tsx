@@ -13,14 +13,17 @@ import { colorGenerator } from "@/lib/colorGenerator";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const BudgetRadialChart = () => {
-  const progressValue = 75;
+interface Props {
+  progress: number;
+  budgetTotal: number
+}
 
+const BudgetRadialChart = ({ progress, budgetTotal }: Props) => {
   const data: ChartData<"doughnut"> = {
     labels: ["Already spent", "Left to spend"],
     datasets: [
       {
-        data: [progressValue, 100 - progressValue],
+        data: [100 - progress, progress],
         backgroundColor: colorGenerator(2),
         borderColor: ["#4d4637"],
         borderWidth: 2,
@@ -57,13 +60,11 @@ const BudgetRadialChart = () => {
         options={options}
         className="z-10"
       />
-      <div
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-xl font-bold"
-      >
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-xl font-bold">
         <div className="flex flex-col items-center">
           <p className="font-semibold">Budget:</p>
           <small id="budget-amount" className="text-secondary/75">
-            $3500.23
+            ${budgetTotal}
           </small>
         </div>
       </div>

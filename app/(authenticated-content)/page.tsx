@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 import { authOptions } from "@/lib/auth";
-import { CustomSession, OverviewTransaction } from "@/lib/types";
+import { CustomSession } from "@/lib/types";
 import { getPlaidAccessToken } from "@/lib/dataFetching/global/getPlaidAccessToken";
 
 import { getUserAccounts } from "@/lib/dataFetching/homePage/getUserAccounts";
@@ -16,6 +16,7 @@ import SpendingAreaChart from "@/components/pages/dashboard/spending/SpendingAre
 import Subscriptions from "@/components/pages/dashboard/subscriptions/Subscriptions";
 import UpcomingBill from "@/components/pages/dashboard/upcomingBill/UpcomingBill";
 import { getUserNxtBill } from "@/lib/dataFetching/homePage/getUserNxtBill";
+import { getUserBudgets } from "@/lib/dataFetching/homePage/getUserBudgets";
 
 export default async function Home() {
   const session: CustomSession | null = await getServerSession(authOptions);
@@ -27,22 +28,26 @@ export default async function Home() {
   const token = await getPlaidAccessToken(session.userID);
 
   // Get Data
-  const accounts = await getUserAccounts(token);
-  const subscriptions = await getUserSubscriptions(accounts, token);
   const todayDate = new Date();
   const firstMonthDate = new Date(
     todayDate.getFullYear(),
     todayDate.getMonth(),
     1
   );
-  const { spending }: { spending: OverviewTransaction[] } =
-    await getUserSpending(
-      accounts,
-      token,
-      firstMonthDate.toISOString().slice(0, 10),
-      todayDate.toISOString().slice(0, 10)
-    );
-  const nxtBills = await getUserNxtBill(accounts, token, todayDate);
+  const accounts = await getUserAccounts(token);
+
+  const [spendingAndBudget, subscriptions, budgets, nxtBills] =
+    await Promise.all([
+      getUserSpending(
+        accounts,
+        token,
+        firstMonthDate.toISOString().slice(0, 10),
+        todayDate.toISOString().slice(0, 10)
+      ),
+      getUserSubscriptions(accounts, token),
+      getUserBudgets(session.userID),
+      getUserNxtBill(accounts, token, todayDate.getMonth()),
+    ]);
 
   return (
     <StaggerAnimWrapper
@@ -58,10 +63,14 @@ export default async function Home() {
       </h1>
 
       <div className="flex flex-col md:grid md:grid-cols-2 md:grid-rows-3 gap-5">
-        <SpendingAreaChart spending={spending} />
+        <SpendingAreaChart spending={spendingAndBudget.spending} />
         <Accounts accounts={accounts} />
         <UpcomingBill nxtBills={nxtBills} />
-        <Budgets />
+        <Budgets
+          budgetTransactions={spendingAndBudget.budgetTransactions}
+          budgets={JSON.parse(JSON.stringify(budgets))}
+          userID={session.userID}
+        />
         <Subscriptions subscriptions={subscriptions} />
       </div>
     </StaggerAnimWrapper>

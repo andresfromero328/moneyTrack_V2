@@ -1,6 +1,6 @@
 "use server";
 import { connectDB } from "@/lib/mongodb";
-import { User } from "@/models/User";
+import { User } from "@/models/models";
 import bcrypt from "bcryptjs";
 
 interface RegisterFormData {

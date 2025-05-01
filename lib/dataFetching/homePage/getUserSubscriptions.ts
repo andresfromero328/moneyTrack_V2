@@ -36,5 +36,5 @@ export const getUserSubscriptions = unstable_cache(
   async (accounts: AccountBase[] | null, plaidAccToken: string) =>
     fetchSubscriptions(accounts, plaidAccToken),
   ["get-user-subscriptions"],
-  { revalidate: 900 }
+  { revalidate: 900, tags: ["get-user-subscriptions"] }
 );

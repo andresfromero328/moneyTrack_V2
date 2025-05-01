@@ -1,4 +1,4 @@
-import { User } from "@/models/User";
+import { User } from "@/models/models";
 import { connectDB } from "../../mongodb";
 import { unstable_cache } from "next/cache";
 

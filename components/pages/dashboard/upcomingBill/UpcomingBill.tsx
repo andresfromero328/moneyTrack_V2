@@ -4,9 +4,8 @@ import { TransactionStream } from "plaid";
 
 import { MdKeyboardArrowRight } from "react-icons/md";
 
-import detailedCatMap from "@/utils/categoryMap.json" assert { type: "json" };
 import { changeDateString } from "@/utils/helperFuncs";
-const detailedCatMapTyped = detailedCatMap as Record<string, string>;
+import { CATEGORY_MAP } from "@/utils/categories";
 
 interface Props {
   nxtBills: TransactionStream[];
@@ -28,7 +27,7 @@ const UpcomingBill = ({ nxtBills }: Props) => {
             >
               <div className="flex items-center justify-between">
                 <p className="lowercase">
-                  {detailedCatMapTyped[
+                  {CATEGORY_MAP[
                     bill.personal_finance_category?.detailed as string
                   ] || "unknown title"}{" "}
                   - ${bill.average_amount.amount}

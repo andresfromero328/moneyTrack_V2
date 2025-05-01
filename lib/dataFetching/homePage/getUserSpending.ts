@@ -1,10 +1,11 @@
 import { AccountBase } from "plaid";
 import { client } from "@/lib/plaid";
 import { unstable_cache } from "next/cache";
-import { OverviewTransaction } from "@/lib/types";
+import { BudgetTransaction, OverviewTransaction } from "@/lib/types";
 import {
   OMIT_DTLD_CATS_SPENDING,
-  OMIT_PRIM_CATS_SPENDING,
+  // OMIT_PRIM_CATS_SPENDING,
+  SPENDING_PRIM_CATS,
 } from "@/utils/categories";
 
 const fetchSpending = async (
@@ -48,7 +49,7 @@ const fetchSpending = async (
     const spending: OverviewTransaction[] = transactions
       .filter((transaction) => {
         const validCategory =
-          !OMIT_PRIM_CATS_SPENDING.includes(
+          SPENDING_PRIM_CATS.includes(
             transaction.personal_finance_category!.primary
           ) ||
           !OMIT_DTLD_CATS_SPENDING.includes(
@@ -70,7 +71,34 @@ const fetchSpending = async (
       }))
       .reverse();
 
-    return { spending, transactions };
+    const budgetTransactions: BudgetTransaction[] = transactions
+      .filter((transaction) => {
+        const validCategory =
+          SPENDING_PRIM_CATS.includes(
+            transaction.personal_finance_category!.primary
+          ) ||
+          !OMIT_DTLD_CATS_SPENDING.includes(
+            transaction.personal_finance_category!.detailed
+          );
+
+        // const isOutflow = transaction.amount > 0;
+
+        return (
+          validCategory &&
+          // isOutflow &&
+          typeof transaction.merchant_name === "string"
+        );
+      })
+      .map((transaction) => ({
+        name: transaction.merchant_name || transaction.name,
+        amount: Math.abs(transaction.amount),
+        date: transaction.date,
+        mCategory: transaction.personal_finance_category?.primary || "unknown",
+        sCategory: transaction.personal_finance_category?.detailed || "unknown",
+      }))
+      .reverse();
+
+    return { spending, budgetTransactions };
   } catch (e) {
     console.log(e);
     throw e;
@@ -85,5 +113,5 @@ export const getUserSpending = unstable_cache(
     lastDay: string
   ) => fetchSpending(accounts, accessToken, firstDay, lastDay),
   ["get-user-spending"],
-  { revalidate: 1800 }
+  { revalidate: 1800, tags: ["get-user-spending"] }
 );

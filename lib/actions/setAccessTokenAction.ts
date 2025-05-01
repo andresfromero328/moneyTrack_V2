@@ -2,7 +2,7 @@
 
 import { connectDB } from "@/lib/mongodb";
 import { client } from "@/lib/plaid";
-import { User } from "@/models/User";
+import { User } from "@/models/models";
 
 interface Request {
   userID: string;
