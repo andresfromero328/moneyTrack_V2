@@ -112,7 +112,7 @@ const CalendarHeader = ({ selectedDate, setSelectedDate }: Props) => {
                   year: "numeric",
                 })}
               </small>
-              <FaCalendar className="text-extra" />
+              <FaCalendar className="text-extra text-secondary" />
             </button>
           }
           onChange={(date: Date | null) => setSelectedDate(date!)}

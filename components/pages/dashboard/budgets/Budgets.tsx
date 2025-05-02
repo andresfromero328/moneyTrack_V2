@@ -47,14 +47,15 @@ const Budgets = ({ budgetTransactions, budgets, userID }: Props) => {
 
     if (budget === "all") {
       const budgetProgress = handleDefaultBudget();
-      setBudgetProgress(budgetProgress);
+      setBudgetProgress(budgetProgress * 100);
     } else {
       const currBudget = budgets.find((bgt) => bgt.budgetName === budget);
       const totalAmount = currBudget!.budgetAmount;
+
       const transactions = budgetTransactions.filter((transaction) => {
         if (
-          currBudget?.mCategory === transaction.mCategory ||
-          currBudget?.sCategory === transaction.sCategory
+          currBudget?.mCategory.toUpperCase() === transaction.mCategory ||
+          currBudget?.sCategory.toUpperCase() === transaction.sCategory
         )
           return transaction;
         return null;
@@ -62,7 +63,7 @@ const Budgets = ({ budgetTransactions, budgets, userID }: Props) => {
       const spent = transactions.reduce((sum, b) => {
         return sum + Number(b.amount || 0);
       }, 0);
-      setBudgetProgress(spent / totalAmount);
+      setBudgetProgress((spent / totalAmount) * 100);
       setBudgetTotal(totalAmount);
     }
   };
@@ -85,8 +86,13 @@ const Budgets = ({ budgetTransactions, budgets, userID }: Props) => {
               />
 
               <div className="flex flex-col gap-1">
-                <p className="font-semibold">Left for Spending:</p>
-                <small>${budgetTotal - budgetProgress}</small>
+                <p className="font-bold text-secondary">Left for Spending:</p>
+                <small>
+                  $
+                  {(budgetTotal - (budgetProgress / 100) * budgetTotal).toFixed(
+                    2
+                  )}
+                </small>
                 <small>
                   on{" "}
                   <span className="text-secondary/65 uppercase">

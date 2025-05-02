@@ -15,7 +15,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
   progress: number;
-  budgetTotal: number
+  budgetTotal: number;
 }
 
 const BudgetRadialChart = ({ progress, budgetTotal }: Props) => {
@@ -23,7 +23,7 @@ const BudgetRadialChart = ({ progress, budgetTotal }: Props) => {
     labels: ["Already spent", "Left to spend"],
     datasets: [
       {
-        data: [100 - progress, progress],
+        data: [progress, 100 - progress],
         backgroundColor: colorGenerator(2),
         borderColor: ["#4d4637"],
         borderWidth: 2,
@@ -64,7 +64,7 @@ const BudgetRadialChart = ({ progress, budgetTotal }: Props) => {
         <div className="flex flex-col items-center">
           <p className="font-semibold">Budget:</p>
           <small id="budget-amount" className="text-secondary/75">
-            ${budgetTotal}
+            ${budgetTotal.toFixed(2)}
           </small>
         </div>
       </div>

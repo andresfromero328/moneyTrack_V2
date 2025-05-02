@@ -29,8 +29,11 @@ const Calendar = () => {
         </div>
       </div>
       <h2 className="mt-5">
-        {selectedDate.toUTCString().split(" ").slice(0, 4).join(" ")} - Bills
-        Report
+        {selectedDate.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+        })}{" "}
+        - Bills Report
       </h2>
     </>
   );
